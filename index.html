@@ -3,59 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Followers Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>FOLLOWER LIST | Premium Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #ec4899;
-            --background: #0f172a;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --text-secondary: #94a3b8;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --accent-purple: #7c3aed;
+            --accent-pink: #ec4899;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --bg-light: #ffffff;
+            --card-light: #f1f5f9;
+            --text-dark: #0f172a;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background: var(--background);
-            color: var(--text);
+            background: var(--primary-dark);
+            color: var(--text-light);
             min-height: 100vh;
+            transition: background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            min-height: 100vh;
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-dark);
         }
 
-        /* Sidebar */
-        .sidebar {
-            background: var(--surface);
+        /* Language Bar */
+        .language-bar {
+            background: var(--secondary-dark);
+            padding: 0.75rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .light-mode .language-bar {
+            background: var(--card-light);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .language-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .language-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em;
+        }
+
+        .light-mode .language-select {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        }
+
+        .language-select:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .light-mode .language-select:hover {
+            background-color: rgba(0, 0, 0, 0.08);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
             padding: 2rem;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .brand {
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+        }
+
+        .logo {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 3rem;
         }
 
-        .brand-logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -64,70 +131,159 @@
             color: white;
         }
 
-        .brand-name {
+        .logo-text {
+            font-size: 1.5rem;
             font-weight: 700;
-            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        .nav-list {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
+        .controls {
             display: flex;
-            align-items: center;
             gap: 1rem;
-            padding: 1rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: 0.3s ease;
+        }
+
+        .light-mode .theme-toggle {
+            color: var(--text-dark);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Stats Section */
+        .stats-container {
+            display: grid;
+            gap: 2rem;
             margin-bottom: 2rem;
         }
 
-        .welcome-text h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        .stat-card {
+            background: var(--secondary-dark);
+            padding: 2rem;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-mode .stat-card {
+            background: var(--card-light);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .search-bar {
+        .stat-update {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* Table Section */
+        .table-container {
+            background: var(--secondary-dark);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: auto;
+        }
+
+        .light-mode .table-container {
+            background: var(--card-light);
+        }
+
+        .table-header {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode .table-header {
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .table-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .search-box {
             position: relative;
             width: 300px;
         }
 
         .search-input {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            background: var(--surface);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            color: var(--text);
-            font-size: 0.9rem;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: 0.3s ease;
+        }
+
+        .light-mode .search-input {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .light-mode .search-input:focus {
+            background: rgba(0, 0, 0, 0.08);
         }
 
         .search-icon {
@@ -135,517 +291,358 @@
             left: 1rem;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-secondary);
+            color: var(--text-gray);
         }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .stat-trend {
+        .export-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.9rem;
         }
 
-        .trend-up {
-            color: var(--success);
+        .export-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
-        .trend-down {
-            color: var(--error);
+        /* Table Content and Responsive Design */
+        .table-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            min-height: 400px;
+            max-height: 600px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-purple) transparent;
         }
 
-        /* Followers Table */
-        .table-container {
-            background: var(--surface);
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
+        .table-content::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .table-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
-            padding: 1rem 1.5rem;
-            background: rgba(99, 102, 241, 0.1);
-            font-weight: 600;
+        .table-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .table-content::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 3px;
+        }
+
+        .follower-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
         }
 
         .follower-item {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            grid-template-columns: auto 1fr auto;
             align-items: center;
+            gap: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: 0.3s ease;
         }
 
-        .follower-item:last-child {
-            border-bottom: none;
+        .light-mode .follower-item {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .follower-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .light-mode .follower-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .follower-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
         }
 
         .follower-info {
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 0.25rem;
         }
 
-        .follower-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        .follower-name {
+            font-weight: 500;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .light-mode .follower-name {
+            color: var(--text-dark);
+        }
+
+        .follower-name:hover {
+            color: var(--accent-purple);
+        }
+
+        .follower-date {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* Loading State */
+        .loading {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 600;
+            padding: 3rem;
+            color: var(--text-gray);
         }
 
-        .follower-username {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .follower-username:hover {
-            text-decoration: underline;
-        }
-
-        .milestone-badge {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .action-button {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .action-button:hover {
-            background: rgba(99, 102, 241, 0.2);
-        }
-
-        /* Charts Container */
-        .charts-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .chart-card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .chart-title {
-            font-weight: 600;
-        }
-
-        .chart-filters {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .filter-button {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-button.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                display: none;
-            }
-
-            .charts-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
         @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .language-bar {
+                padding: 0.5rem 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
             }
 
-            .table-header,
-            .follower-item {
-                grid-template-columns: 1fr 1fr;
+            .header {
+                flex-direction: column;
                 gap: 1rem;
             }
 
-            .follower-join-date,
-            .follower-status {
-                display: none;
+            .controls {
+                width: 100%;
+                justify-content: space-between;
             }
-        }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
 
-        ::-webkit-scrollbar-track {
-            background: var(--surface);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease forwards;
+            .search-box {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-logo">
+    <div class="language-bar">
+        <div class="language-container">
+            <select class="language-select" id="languageSelect">
+                <option value="vi">Tiếng Việt</option>
+                <option value="en">English</option>
+                <option value="fil">Filipino</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
                     <i class="fas fa-heart"></i>
                 </div>
-                <div class="brand-name">Dashboard</div>
+                <h1 class="logo-text" data-lang="title">Analytics Dashboard</h1>
             </div>
-            
-            <nav>
-                <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <i class="fas fa-home"></i>
-                            Tổng quan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            Người theo dõi
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-chart-line"></i>
-                            Thống kê
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-star"></i>
-                            Cột mốc
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+            <div class="controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="export-btn" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    <span data-lang="exportPDF">Xuất PDF</span>
+                </button>
+            </div>
+        </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="header">
-                <div class="welcome-text">
-                    <h1>Xin chào!</h1>
-                    <p>Chào mừng bạn đến với bảng điều khiển người theo dõi</p>
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-label" data-lang="totalFollowers">Tổng Người Theo Dõi</div>
+                <div class="stat-value" id="totalFollowers">0</div>
+                <div class="stat-update">
+                    <i class="fas fa-clock"></i>
+                    <span id="lastUpdate"></span>
                 </div>
-                
-                <div class="search-bar">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title" data-lang="followersList">Danh Sách Người Theo Dõi</h2>
+                <div class="search-box">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Tìm kiếm người theo dõi..." id="searchInput">
+                    <input type="text" class="search-input" id="searchInput" data-lang-placeholder="searchPlaceholder">
                 </div>
             </div>
-
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card animate-fade-in">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: var(--primary);">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="growthRate">0%</span>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="totalFollowers">0</div>
-                    <div class="stat-label">Tổng người theo dõi</div>
-                </div>
-
-                <div class="stat-card animate-fade-in" style="animation-delay: 0.1s;">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(236, 72, 153, 0.1); color: var(--secondary);">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="significantMilestones">0</div>
-                    <div class="stat-label">Cột mốc đáng nhớ</div>
-                </div>
-
-                <div class="stat-card animate-fade-in" style="animation-delay: 0.2s;">
-                    <div class="stat-header">
-                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
-                            <i class="fas fa-calendar"></i>
-                        </div>
-                    </div>
-                    <div class="stat-value" id="avgFollowersPerMonth">0</div>
-                    <div class="stat-label">Trung bình/tháng</div>
+            <div class="table-content">
+                <div id="followerList" class="follower-list"></div>
+                <div id="loading" class="loading">
+                    <div class="loading-spinner"></div>
                 </div>
             </div>
-
-            <!-- Followers Table -->
-            <div class="table-container animate-fade-in" style="animation-delay: 0.3s;">
-                <div class="table-header">
-                    <div>Người theo dõi</div>
-                    <div>Ngày theo dõi</div>
-                    <div>Trạng thái</div>
-                    <div>Thao tác</div>
-                </div>
-                <div id="followersList"></div>
-            </div>
-        </main>
+        </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
-    // Hàm định dạng số với dấu phẩy
-    function formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
+        const translations = {
+            vi: {
+                title: "Analytics Dashboard",
+                totalFollowers: "Tổng Người Theo Dõi",
+                followersList: "Danh Sách Người Theo Dõi",
+                searchPlaceholder: "Tìm kiếm người theo dõi...",
+                exportPDF: "Xuất PDF",
+                lastUpdate: "Cập nhật lúc",
+                loading: "Đang tải..."
+            },
+            en: {
+                title: "Analytics Dashboard",
+                totalFollowers: "Total Followers",
+                followersList: "Followers List",
+                searchPlaceholder: "Search followers...",
+                exportPDF: "Export PDF",
+                lastUpdate: "Last updated at",
+                loading: "Loading..."
+            },
+            fil: {
+                title: "Dashboard ng Analytics",
+                totalFollowers: "Kabuuang Mga Tagasunod",
+                followersList: "Listahan ng Mga Tagasunod",
+                searchPlaceholder: "Maghanap ng mga tagasunod...",
+                exportPDF: "I-export sa PDF",
+                lastUpdate: "Huling na-update noong",
+                loading: "Naglo-load..."
+            },
+            de: {
+                title: "Analytics-Dashboard",
+                totalFollowers: "Gesamtzahl der Follower",
+                followersList: "Follower-Liste",
+                searchPlaceholder: "Follower suchen...",
+                exportPDF: "Als PDF exportieren",
+                lastUpdate: "Zuletzt aktualisiert am",
+                loading: "Wird geladen..."
+            },
+            fr: {
+                title: "Tableau de Bord Analytics",
+                totalFollowers: "Nombre Total d'Abonnés",
+                followersList: "Liste des Abonnés",
+                searchPlaceholder: "Rechercher des abonnés...",
+                exportPDF: "Exporter en PDF",
+                lastUpdate: "Dernière mise à jour à",
+                loading: "Chargement..."
+            }
+        };
 
-    // Hàm lấy chữ cái đầu từ username
-    function getInitials(username) {
-        return username.charAt(0).toUpperCase();
-    }
+        let followers = [];
+        const ITEMS_PER_PAGE = 50;
+        let currentPage = 1;
+        let currentLanguage = localStorage.getItem('selectedLanguage') || 'vi';
 
-    // Hàm tính số ngày giữa 2 ngày
-    function daysBetween(date1, date2) {
-        const oneDay = 24 * 60 * 60 * 1000;
-        return Math.round(Math.abs((date1 - date2) / oneDay));
-    }
-
-    // Hàm định dạng ngày
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat('vi-VN', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }).format(date);
-    }
-
-    // Hàm tính trạng thái người theo dõi
-    function getFollowerStatus(dateString) {
-        const followDate = new Date(dateString);
-        const today = new Date();
-        const daysSinceFollow = daysBetween(followDate, today);
-
-        if (daysSinceFollow <= 7) {
-            return {
-                text: 'Mới theo dõi',
-                class: 'new-follower'
-            };
-        } else if (daysSinceFollow <= 30) {
-            return {
-                text: 'Hoạt động',
-                class: 'active'
-            };
-        } else {
-            return {
-                text: 'Lâu năm',
-                class: 'loyal'
-            };
-        }
-    }
-
-    async function loadFollowers() {
-        try {
-            const response = await fetch('data.txt');
-            const text = await response.text();
-            const lines = text.trim().split("\n\n");
-
-            let followers = [];
-            lines.forEach(block => {
-                let user = {};
-                block.split("\n").forEach(line => {
-                    let [key, value] = line.split(": ");
-                    if (key === "Date") user.date = value;
-                    if (key === "Username") user.username = value;
-                });
-                if (user.username && user.date) {
-                    followers.push(user);
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                const key = element.getAttribute('data-lang');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
                 }
             });
 
-            // Cập nhật thống kê
-            const totalFollowers = followers.length;
-            document.getElementById("totalFollowers").textContent = formatNumber(totalFollowers);
-
-            // Tính số cột mốc đáng nhớ (mỗi 1000 người)
-            const significantMilestones = Math.floor(totalFollowers / 1000);
-            document.getElementById("significantMilestones").textContent = significantMilestones;
-
-            // Tính trung bình người theo dõi mỗi tháng
-            const firstFollower = new Date(followers[0].date);
-            const lastFollower = new Date(followers[followers.length - 1].date);
-            const monthsDiff = (lastFollower - firstFollower) / (1000 * 60 * 60 * 24 * 30);
-            const avgPerMonth = Math.round(totalFollowers / monthsDiff);
-            document.getElementById("avgFollowersPerMonth").textContent = formatNumber(avgPerMonth);
-
-            // Tính tốc độ tăng trưởng
-            const recentFollowers = followers.filter(f => {
-                const followDate = new Date(f.date);
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                return followDate >= thirtyDaysAgo;
-            }).length;
-            const growthRate = ((recentFollowers / totalFollowers) * 100).toFixed(1);
-            document.getElementById("growthRate").textContent = `${growthRate}%`;
-
-            // Render danh sách người theo dõi
-            const followersList = document.getElementById("followersList");
-            followersList.innerHTML = "";
-
-            followers.forEach((follower, index) => {
-                const status = getFollowerStatus(follower.date);
-                const isMilestone = (index + 1) % 1000 === 0;
-
-                const followerElement = document.createElement("div");
-                followerElement.className = `follower-item animate-fade-in`;
-                followerElement.style.animationDelay = `${index * 0.05}s`;
-
-                followerElement.innerHTML = `
-                    <div class="follower-info">
-                        <div class="follower-avatar">
-                            ${getInitials(follower.username)}
-                        </div>
-                        <div>
-                            <a href="https://www.tiktok.com/@${follower.username}" 
-                               target="_blank" 
-                               class="follower-username">@${follower.username}</a>
-                            ${isMilestone ? `<span class="milestone-badge">Cột mốc ${formatNumber(index + 1)}</span>` : ''}
-                        </div>
-                    </div>
-                    <div>${formatDate(follower.date)}</div>
-                    <div class="follower-status ${status.class}">${status.text}</div>
-                    <button class="action-button">
-                        <i class="fas fa-external-link-alt"></i>
-                    </button>
-                `;
-
-                followersList.appendChild(followerElement);
+            document.querySelectorAll('[data-lang-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-lang-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
             });
 
-            // Thêm chức năng tìm kiếm
-            const searchInput = document.getElementById("searchInput");
-            searchInput.addEventListener("input", (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const followerItems = document.querySelectorAll(".follower-item");
-
-                followerItems.forEach(item => {
-                    const username = item.querySelector(".follower-username").textContent.toLowerCase();
-                    if (username.includes(searchTerm)) {
-                        item.style.display = "grid";
-                    } else {
-                        item.style.display = "none";
-                    }
-                });
-            });
-
-        } catch (error) {
-            console.error("Lỗi tải danh sách:", error);
+            updateLastUpdateText();
+            localStorage.setItem('selectedLanguage', lang);
         }
-    }
 
-    // Load dữ liệu ban đầu
-    loadFollowers();
+        function formatNumber(num) {
+            return new Intl.NumberFormat(currentLanguage).format(num);
+        }
 
-    // Cập nhật dữ liệu mỗi 5 phút
-    setInterval(loadFollowers, 300000);
+        function formatDate(dateString) {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Intl.DateTimeFormat(currentLanguage, options).format(new Date(dateString));
+        }
 
-    // Thêm sự kiện cho các nút điều hướng
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        });
-    });
-</script>
-</body>
-</html>
+        function getInitials(username) {
+            return username.charAt(0).toUpperCase();
+        }
+
+        function updateLastUpdateText() {
+            const lastUpdateElement = document.getElementById('lastUpdate');
+            const currentTime = new Date();
+            lastUpdateElement.textContent = `${translations[currentLanguage].lastUpdate} ${formatDate(currentTime)}`;
+        }
+
+        async function loadFollowers() {
+            try {
+                document.getElementById('loading').style.display = 'flex';
+                const response = await fetch('data.txt');
+                const text = await response.text();
+                const lines = text.trim().split('\n\n');
+
+                followers = lines.map(block => {
+                    const user = {};
+                    block.split('\n').forEach(line => {
+                        const [key, value] = line.split(': ');
+                        if (key === 'Date') user.date = value;
+                        if (key === 'Username') user.username = value;
+                    });
+                    return user;
+                }).filter(user => user.username && user.date);
+
+                updateStats();
+                renderFollowers();
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Lỗi khi tải dữ liệu:', error);
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalFollowers').textConten
